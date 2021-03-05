@@ -1,96 +1,40 @@
 import random
 
 
-""" Stable Roommate Algorithm.
-
-    Stable pairing means no pair will run off:
-        - x cannot have a better partner than y
-        - y cannot have a worse partner than x
-
-    Target: time complexity O(n^2)
-    Objective: determine if stable pairings are possible and return pairs
-
-    Algorithm:
-        Step 0: Get ranked input from users for preferences. Need even # users
-                TODO: add function to insert dummy variable for odd # users
-
-        *Phase 1*
-            Step 1: Make proposals.
-
-                    To be able to determine if table is stable, everyone needs
-                    - to send a proposal
-                    - receive a proposal and accept a proposal*
-                    *can reject accepted proposal if better offer received
-
-            Step 2: Is this a stable table? Return True or False.
-
-            Step 2: Eliminate all preference pairs after accepted proposal
-                    in preference list (successors will be worse than current
-                    offer).
-
-            Step 3: Is length of participants' preference list equal to 1?
-                    - Yes, stable matches found and return pairs
-                    - No, proceed to phase 2
-
-        *Phase 2*
-            Step 1: Start with first participant with preference list of at
-                    least 2.
-
-                    Create 'p' and 'q' lists
-                    p: [participant   ],[last item of q0],[last item of q1]...
-                    q: [2nd item of p0],[2nd item of p1 ],[2nd item of p2 ]...
-
-                    Continue process until a pattern repeats in p. This is a
-                    cycle to eliminate
-
-            Step 2: Put pairs into a cycle list [(q0, p1), (q1, p2), ...]
-                    to generate pairs to eliminate.
-
-                    Eliminate pairs symmetrically.
-
-            Step 3: Continue process until everyone's preference list is
-                    equal or less than 1
-                    - If all preference lists equal one then stable pair found
-                      and return
-                    - If any preference list is empty, no stable table and
-                      return UnstableTableError
-"""
-
-
 class UnstableTableError(Exception):
-    """ Error to represent unstable table with no stable pairings possible """
+    """ Error for unstable table when no stable pairings are possible. """
 
 
 def make_proposals(preferences):
-    """ Takes in a dictionary with key equal to a participant and value
-        equal to a list of that participant's preferences
+    """ Takes in a dictionary with key equal to a participant and
+        value equal to a list of that participant's preferences.
 
         Function iterates over each participant in order to find and return
-        a record of the proposals in the form of a dictionary
+        a record of the proposals in the form of a dictionary.
 
         Each participant proposes in turn using its preference list and
         receives a proposal, accepting only the highest preferred
-        proposal using its preference list and rejecting all others
+        proposal using its preference list and rejecting all others.
 
         Function returns when there are no longer any participants in the
         priority queue (participants left needing to propose) or there are
-        no more participants to propose to
+        no more participants to propose to.
 
         For example:
 
         Inputs of
             preferences = {
-                "A": ["B", "D", "C"],
-                "B": ["D", "C", "A"],
-                "C": ["A", "D", "B"],
-                "D": ["A", "B", "C"],
+                'A': ['B', 'D', 'C'],
+                'B': ['D', 'C', 'A'],
+                'C': ['A', 'D', 'B'],
+                'D': ['A', 'B', 'C'],
             }
         Outputs =>
             proposal_record = {
-                "A": ["D", "D"],
-                "B": ["C", "C"],
-                "C": ["B", "B"],
-                "D": ["A", "A"],
+                'A': ['D', 'D'],
+                'B': ['C', 'C'],
+                'C': ['B', 'B'],
+                'D': ['A', 'A'],
             }
     """
     proposal_record = {}
@@ -211,18 +155,18 @@ def remove_trailing_prefs(proposal_record, preferences):
                 'D': ['B', 'C'], - proposed to B and accepted proposal from C
             }
             preferences = {
-                "A": ["C", "B", "D"], - remove all prefs that rank lower than B
-                "B": ["A", "C", "D"],
-                "C": ["D", "B", "A"],
-                "D": ["B", "A", "C"], - remove "A" since "D" is removed from A's list
+                'A': ['C', 'B', 'D'], - remove all prefs that rank lower than B
+                'B': ['A', 'C', 'D'],
+                'C': ['D', 'B', 'A'],
+                'D': ['B', 'A', 'C'], - remove 'A' since 'D' is removed from A's list
             }
 
         Outputs =>
             preferences = {
-                "A": ["C", "B"],
-                "B": ["A", "C", "D"],
-                "C": ["D", "B", "A"],
-                "D": ["B", "C"],
+                'A': ['C', 'B'],
+                'B': ['A', 'C', 'D'],
+                'C': ['D', 'B', 'A'],
+                'D': ['B', 'C'],
             }
     """
     for proposer in proposal_record:
@@ -310,10 +254,10 @@ def get_stable_match(preferences):
             # from cycle path, find pairs to remove
             elimination_pairs = find_pairs_to_remove(cycle, preferences)
 
-            # try:
-            preferences = remove_pairs(elimination_pairs, preferences)
-            # except UnstableTableError:
-            #     return UnstableTableError
+            try:
+                preferences = remove_pairs(elimination_pairs, preferences)
+            except UnstableTableError:
+                return UnstableTableError
 
             # reset p and q for next iteration
             p = [participant, ]
@@ -396,43 +340,40 @@ def remove_pairs(pairs, preferences):
     return preferences
 
 
-def find_stable_pairings(preference_list):
-    """ Takes in a dictionary with key equal to a participant and value equal to
-        a list of preferences
+def find_stable_pairings(preferences):
+    """ Takes in a dictionary with key equal to a participant and
+        value equal to a list of preferences
 
-        Returns preference_list with each participant having only one preference
-        left, their stable pair
+        Returns stable pairing for each participant
 
         For example:
         Input of
-        preferences_list = {
-                'A': ['C', 'B'],
-                'B': ['A', 'C', 'D'],
-                'C': ['D', 'B', 'A'],
-                'D': ['B', 'C']
-            }
+        preferences = {
+            "A": ["C", "B", "D"],
+            "B": ["A", "C", "D"],
+            "C": ["D", "B", "A"],
+            "D": ["B", "A", "C"],
+        }
         Output =>
         preferences_list = {
-            'A': ['F'],
-            'B': ['D'],
-            'C': ['E'],
-            'D': ['B'],
-            'E': ['C'],
-            'F': ['A']
+            'A': ['B'],
+            'B': ['A'],
+            'C': ['D'],
+            'D': ['C']
         }
     """
-    proposal_record = make_proposals(preference_list)
+    proposal_record = make_proposals(preferences)
 
     if not is_stable_table(proposal_record):
         return UnstableTableError("No stable pairings possible")
 
-    updated_preference_list = remove_trailing_prefs(
+    updated_preferences = remove_trailing_prefs(
         proposal_record,
-        preference_list
+        preferences
     )
 
     try:
-        return get_stable_match(updated_preference_list)
+        return get_stable_match(updated_preferences)
     except UnstableTableError:
         return UnstableTableError("No stable pairings possible")
 
@@ -520,7 +461,7 @@ proposal_record3 = make_proposals(stable_phase2)
 updated_prefs3 = remove_trailing_prefs(proposal_record3, stable_phase2)
 # print(updated_prefs3)
 stable_pairings = get_stable_match(updated_prefs3)
-print(stable_pairings)
+# print(stable_pairings)
 
 # Full algorithm runs for ALL test cases
 # print(find_stable_pairings(unstable))
