@@ -432,6 +432,15 @@ students = {
     "Sam": ["Charlie", "Paul", "Kelly", "Elise", "Peter"],
 }
 
+# student_stable_pairings = {
+#     'Charlie': ['Sam'],
+#     'Peter': ['Kelly'],
+#     'Elise': ['Paul'],
+#     'Paul': ['Elise'],
+#     'Kelly': ['Peter'],
+#     'Sam': ['Charlie']
+# }
+
 rithm = {}
 
 # Create a Rithm School student cohort size of 20
@@ -514,11 +523,4 @@ proposal_record1 = make_proposals(unstable)
 #     10: [5]
 # }
 
-# student_stable_pairings = {
-#     'Charlie': ['Sam'],
-#     'Peter': ['Kelly'],
-#     'Elise': ['Paul'],
-#     'Paul': ['Elise'],
-#     'Kelly': ['Peter'],
-#     'Sam': ['Charlie']
-# }
+
