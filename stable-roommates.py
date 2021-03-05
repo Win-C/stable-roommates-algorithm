@@ -1,4 +1,4 @@
-import random
+import random  # Used in illustrative text case
 
 
 class UnstableTableError(Exception):
@@ -409,7 +409,6 @@ medium = {
     "E": ["C", "A", "B", "D", "F"],  # PS: C, PR: D
     "F": ["E", "A", "C", "D", "B"],  # PS: A, PR: B
 }
-# matches3 (A, F), (B, D), (C, E)
 
 large = {
         1: [8, 2, 9, 3, 6, 4, 5, 7, 10],
@@ -435,6 +434,7 @@ students = {
 
 rithm = {}
 
+# Create a Rithm School student cohort size of 20
 for i in range(1, 21):
     temp = []
     while len(temp) != 19:
@@ -450,17 +450,17 @@ proposal_record1 = make_proposals(unstable)
 # print(is_stable_table(proposal_record1))
 
 # Phase 1 - stable table
-proposal_record2 = make_proposals(stable_phase1)
+# proposal_record2 = make_proposals(stable_phase1)
 # print(proposal_record2)
 # print(is_stable_table(proposal_record2))
-updated_prefs2 = remove_trailing_prefs(proposal_record2, stable_phase1)
+# updated_prefs2 = remove_trailing_prefs(proposal_record2, stable_phase1)
 # print(updated_prefs2)
 
 # Phase 2 - stable table
-proposal_record3 = make_proposals(stable_phase2)
-updated_prefs3 = remove_trailing_prefs(proposal_record3, stable_phase2)
+# proposal_record3 = make_proposals(stable_phase2)
+# updated_prefs3 = remove_trailing_prefs(proposal_record3, stable_phase2)
 # print(updated_prefs3)
-stable_pairings = get_stable_match(updated_prefs3)
+# stable_pairings = get_stable_match(updated_prefs3)
 # print(stable_pairings)
 
 # Full algorithm runs for ALL test cases
@@ -471,3 +471,54 @@ stable_pairings = get_stable_match(updated_prefs3)
 # print(find_stable_pairings(large))
 # print(find_stable_pairings(students))
 # print(find_stable_pairings(rithm))
+
+
+# ------------------------ Illustrative Test Cases Solutions ------------------
+
+# unstable table
+# No stable pairings possible
+
+# stable_phase1_stable_pairings = {
+#     'A': ['B'],
+#     'B': ['A'],
+#     'C': ['D'],
+#     'D': ['C']
+# }
+
+# stable_phase2_stable_pairings = {
+#     'A': ['B'],
+#     'B': ['A'],
+#     'C': ['D'],
+#     'D': ['C']
+# }
+
+# medium_stable_pairings = {
+#     'A': ['F'],
+#     'B': ['D'],
+#     'C': ['E'],
+#     'D': ['B'],
+#     'E': ['C'],
+#     'F': ['A']
+# }
+
+# large_stable_pairings = {
+#     1: [7],
+#     2: [8],
+#     3: [6],
+#     4: [9],
+#     5: [10],
+#     6: [3],
+#     7: [1],
+#     8: [2],
+#     9: [4],
+#     10: [5]
+# }
+
+# student_stable_pairings = {
+#     'Charlie': ['Sam'],
+#     'Peter': ['Kelly'],
+#     'Elise': ['Paul'],
+#     'Paul': ['Elise'],
+#     'Kelly': ['Peter'],
+#     'Sam': ['Charlie']
+# }
